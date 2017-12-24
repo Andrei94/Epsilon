@@ -12,6 +12,7 @@ public class ProcessesConfig {
 	private final Map<String, String> map = new HashMap<String, String>() {{
 		put("CertMS", "D:\\Programming\\Master\\CertMS\\CertMS\\bin\\Debug\\CertMS.exe");
 		put("CertMSCRUD", "D:\\Programming\\Master\\CertMSCRUD\\CertMSCRUD\\bin\\Debug\\CertMSCRUD.exe");
+		put("CertMSGame", "D:\\Programming\\Master\\CertMSGame\\CertMSGame\\bin\\Debug\\CertMSGame.exe");
 	}};
 
 	public Optional<String> get(final String key) {
