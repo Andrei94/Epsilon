@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
+import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @EnableAutoConfiguration
@@ -27,11 +29,11 @@ public class ProcessController {
 
 	@RequestMapping("/start/{name}")
 	public String startProcess(@PathVariable("name") final String name,
-	                           @RequestParam("op") final String operation,
-	                           @RequestParam("data") final String data) {
-		logger.info("Process " + name + " started with " + operation + " and " + data);
+	                           @RequestParam final Map<String, String> body) {
+		logger.info("Process " + name + " started with " + body.entrySet());
 		final StringBuilder response = new StringBuilder();
-		config.get(name).ifPresent(path -> response.append(routingController.startProcess(name, Arrays.asList(path, operation, data))));
+		config.get(name).ifPresent(path -> response.append(routingController.startProcess(name, Stream.concat(Stream.of(path), body.values().stream())
+				.collect(Collectors.toList()))));
 		return response.toString();
 	}
 
