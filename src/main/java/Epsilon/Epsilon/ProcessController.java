@@ -9,11 +9,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.logging.Logger;
 
 @RestController
 @EnableAutoConfiguration
 @Import({ProcessesConfig.class, RoutingController.class})
 public class ProcessController {
+	private final Logger logger = Logger.getLogger(ProcessController.class.getName());
 	@Autowired
 	private ProcessesConfig config;
 
@@ -27,6 +29,7 @@ public class ProcessController {
 	public String startProcess(@PathVariable("name") final String name,
 	                           @RequestParam("op") final String operation,
 	                           @RequestParam("data") final String data) {
+		logger.info("Process " + name + " started with " + operation + " and " + data);
 		final StringBuilder response = new StringBuilder();
 		config.get(name).ifPresent(path -> response.append(routingController.startProcess(name, Arrays.asList(path, operation, data))));
 		return response.toString();
