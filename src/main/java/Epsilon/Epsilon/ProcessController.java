@@ -17,8 +17,7 @@ public class ProcessController {
 	@Autowired
 	private ProcessesConfig config;
 
-	@Autowired
-	private RoutingController routingController;
+	private final RoutingController routingController = new RoutingController();
 
 	public ProcessController() {
 		routingController.startWatcher();
