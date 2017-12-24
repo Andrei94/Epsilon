@@ -1,4 +1,4 @@
-package ComputeEngine.ComputeEngine;
+package Epsilon.Epsilon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

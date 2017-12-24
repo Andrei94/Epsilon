@@ -1,4 +1,4 @@
-package ComputeEngine.ComputeEngine;
+package Epsilon.Epsilon;
 
 @SuppressWarnings("UtilityClass")
 public final class Constants {
