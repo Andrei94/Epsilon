@@ -13,25 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @EnableAutoConfiguration
 public class RoutingController {
-    private final Map<String, Process> processes = new ConcurrentHashMap<>();
+    final Map<String, Process> processes = new ConcurrentHashMap<>();
 
-	public RoutingController() {
-		final Thread procWatcher = new Thread(() -> {
-			//noinspection InfiniteLoopStatement
-			while(true) {
-				processes.forEach((key, process) -> {
-					if(!process.isAlive())
-						processes.remove(key);
-				});
-			}
-		});
-		procWatcher.setDaemon(true);
-		procWatcher.start();
-	}
-
-	void startProcess(final String programKey, final List<String> args) {
+	String startProcess(final String programKey, final List<String> args) {
 		try {
 			processes.put(programKey, new ProcessBuilder(args).start());
+			return getProcessResponse(programKey);
 		} catch(final IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -40,10 +27,6 @@ public class RoutingController {
 	void killProcess(final String name, final Process process) {
 		process.destroy();
 		processes.remove(name);
-	}
-
-	int processCount() {
-		return processes.size();
 	}
 
 	String getProcessResponse(final String proc) {
@@ -64,5 +47,19 @@ public class RoutingController {
 
 	public Optional<Process> getProcess(final String name) {
 		return Optional.ofNullable(processes.get(name));
+	}
+
+	public void startWatcher() {
+		final Thread procWatcher = new Thread(() -> {
+			//noinspection InfiniteLoopStatement
+			while(true) {
+				processes.forEach((key, process) -> {
+					if(!process.isAlive())
+						processes.remove(key);
+				});
+			}
+		});
+		procWatcher.setDaemon(true);
+		procWatcher.start();
 	}
 }

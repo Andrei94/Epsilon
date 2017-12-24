@@ -20,11 +20,17 @@ public class ProcessController {
 	@Autowired
 	private RoutingController routingController;
 
+	public ProcessController() {
+		routingController.startWatcher();
+	}
+
 	@RequestMapping("/start/{name}")
-	public void startProcess(@PathVariable("name") final String name,
-	                         @RequestParam("op") final String operation,
-	                         @RequestParam("data") final String data) {
-		config.get(name).ifPresent(path -> routingController.startProcess(name, Arrays.asList(path, operation, data)));
+	public String startProcess(@PathVariable("name") final String name,
+	                           @RequestParam("op") final String operation,
+	                           @RequestParam("data") final String data) {
+		final StringBuilder response = new StringBuilder();
+		config.get(name).ifPresent(path -> response.append(routingController.startProcess(name, Arrays.asList(path, operation, data))));
+		return response.toString();
 	}
 
 	@RequestMapping("/kill/{name}")
