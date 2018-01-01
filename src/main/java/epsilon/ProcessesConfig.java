@@ -1,4 +1,4 @@
-package Epsilon.Epsilon;
+package epsilon;
 
 import org.springframework.stereotype.Component;
 

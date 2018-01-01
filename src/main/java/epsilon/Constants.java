@@ -1,7 +1,6 @@
-package Epsilon.Epsilon;
+package epsilon;
 
 @SuppressWarnings("UtilityClass")
 public final class Constants {
     public static final String EMPTY_STRING = "";
-    public static final String SPACE = " ";
 }
