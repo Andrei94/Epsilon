@@ -1,13 +1,13 @@
 package epsilon;
 
+import epsilon.task.BaseProcess;
+import epsilon.task.ProcessCreator;
+import epsilon.task.Task;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import task.BaseProcess;
-import task.ProcessCreator;
-import task.Task;
 
 import java.io.IOException;
 import java.util.Arrays;

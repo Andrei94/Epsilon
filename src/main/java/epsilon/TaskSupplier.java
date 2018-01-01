@@ -1,6 +1,6 @@
 package epsilon;
 
-import task.Task;
+import epsilon.task.Task;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

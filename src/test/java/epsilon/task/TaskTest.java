@@ -1,11 +1,11 @@
-package task;
+package epsilon.task;
 
 import epsilon.Constants;
 import org.junit.jupiter.api.Test;
 
+import static epsilon.task.TaskCreator.createAliveTask;
+import static epsilon.task.TaskCreator.createDeadTask;
 import static org.junit.jupiter.api.Assertions.*;
-import static task.TaskCreator.createAliveTask;
-import static task.TaskCreator.createDeadTask;
 
 class TaskTest {
 	@Test

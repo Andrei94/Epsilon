@@ -1,7 +1,7 @@
-package task;
+package epsilon.task;
 
-import static task.ProcessCreator.createAliveProcess;
-import static task.ProcessCreator.createDeadProcess;
+import static epsilon.task.ProcessCreator.createAliveProcess;
+import static epsilon.task.ProcessCreator.createDeadProcess;
 
 @SuppressWarnings("UtilityClass")
 final class TaskCreator {

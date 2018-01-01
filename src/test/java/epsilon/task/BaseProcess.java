@@ -1,4 +1,4 @@
-package task;
+package epsilon.task;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package task;
+package epsilon.task;
 
 class AliveProcess extends BaseProcess {
 	AliveProcess() {

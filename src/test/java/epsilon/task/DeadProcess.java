@@ -1,4 +1,4 @@
-package task;
+package epsilon.task;
 
 class DeadProcess extends BaseProcess {
 	DeadProcess() {

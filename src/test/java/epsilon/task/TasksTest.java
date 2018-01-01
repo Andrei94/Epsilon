@@ -1,4 +1,4 @@
-package task;
+package epsilon.task;
 
 import epsilon.TaskSupplier;
 import org.junit.jupiter.api.Nested;
@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
+import static epsilon.task.ProcessCreator.createAliveProcess;
+import static epsilon.task.ProcessCreator.createDeadProcess;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static task.ProcessCreator.createAliveProcess;
-import static task.ProcessCreator.createDeadProcess;
 
 class TasksTest {
 	private TaskSupplier supplier;

@@ -1,7 +1,7 @@
 package epsilon;
 
-import task.Task;
-import task.TaskOps;
+import epsilon.task.Task;
+import epsilon.task.TaskOps;
 
 import java.util.ArrayList;
 import java.util.List;
