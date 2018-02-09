@@ -1,23 +1,20 @@
 package epsilon;
 
-import epsilon.task.BaseProcess;
 import epsilon.task.ProcessCreator;
 import epsilon.task.Task;
-import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class RoutingControllerTest {
 	private final ProcessesConfig config = new ProcessesConfig();
-	private final String process = "CertMSCRUD";
+	private final String process = "CertMdssSCRUD";
 
 	@Nested
 	class StartProcessesSuccessfully {
@@ -45,7 +42,7 @@ class RoutingControllerTest {
 		}
 
 		private void startProcess(final String op, final String data) {
-			config.get(process).ifPresent(path -> controller.startProcess(process, Arrays.asList(path, op, data)));
+			config.getExecutable(process).ifPresent(path -> controller.startProcess(process, new Arguments(path, Arrays.asList(op, data), Collections.emptyList())));
 		}
 
 		@Test
@@ -59,37 +56,6 @@ class RoutingControllerTest {
 			assertFalse(controller.isWatcherRunning());
 		}
 
-		@AfterEach
-		void clean() {
-			controller.getProcess(process).ifPresent(p -> controller.killProcess(process, p));
-		}
-
-		private class RoutingControllerMock extends RoutingController {
-			private boolean watcherRunning = false;
-
-			@Override
-			String startProcess(final String programKey, final List<String> args) {
-				assertEquals(0, processes.size());
-				super.startProcess(programKey, args);
-				assertEquals(1, processes.size());
-				return Constants.EMPTY_STRING;
-			}
-
-			@Override
-			String getProcessResponse(final String proc) {
-				return "It works!";
-			}
-
-			@Override
-			void startWatcher() {
-				super.startWatcher();
-				watcherRunning = true;
-			}
-
-			boolean isWatcherRunning() {
-				return watcherRunning;
-			}
-		}
 	}
 
 	@Nested
@@ -103,12 +69,12 @@ class RoutingControllerTest {
 
 		@Test
 		void throwExceptionOnStart() {
-			assertThrows(RuntimeException.class, () -> controller.startProcess(process, Lists.emptyList()));
+			assertThrows(RuntimeException.class, () -> controller.startProcess(process, new Arguments(Constants.EMPTY_STRING, Collections.emptyList(), Collections.emptyList())));
 		}
 
 		private class RoutingControllerThrowsExceptionForResponse extends RoutingController {
 			@Override
-			Process startProcess(final List<String> args) throws IOException {
+			Task startTask(final Arguments args) throws IOException {
 				throw new IOException();
 			}
 		}
@@ -130,18 +96,6 @@ class RoutingControllerTest {
 			assertEquals(Constants.EMPTY_STRING, controller.getProcessResponse(process));
 		}
 
-		private class RoutingControllerProcessResponse extends RoutingController {
-			private final BaseProcess process;
-
-			RoutingControllerProcessResponse(final BaseProcess process) {
-				this.process = process;
-			}
-
-			@Override
-			String getProcessResponse(final String proc) {
-				processes.put(proc, new Task(process));
-				return super.getProcessResponse(proc);
-			}
-		}
 	}
+
 }

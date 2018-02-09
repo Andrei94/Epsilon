@@ -1,10 +1,12 @@
 package epsilon.task;
 
+import epsilon.Constants;
 import epsilon.TaskSupplier;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static epsilon.task.ProcessCreator.createAliveProcess;
 import static epsilon.task.ProcessCreator.createDeadProcess;
@@ -64,6 +66,6 @@ class TasksTest {
 	}
 
 	private TaskSupplier createOneSizeTaskSupplier(final BaseProcess process) {
-		return new TaskSupplier(Collections.singletonMap("test", new Task(process)));
+		return new TaskSupplier(new ConcurrentHashMap<>(Collections.singletonMap("test", new Task(process, Constants.EMPTY_STRING))));
 	}
 }

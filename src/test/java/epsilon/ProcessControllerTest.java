@@ -10,7 +10,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Collections;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,7 +33,7 @@ class ProcessControllerTest {
 
 	private class RoutingControllerMock extends RoutingController {
 		@Override
-		String startProcess(final String programKey, final List<String> args) {
+		String startProcess(final String programKey, final Arguments args) {
 			assertEquals(0, processes.size());
 			super.startProcess(programKey, args);
 			assertEquals(1, processes.size());

@@ -5,13 +5,13 @@ import epsilon.task.TaskOps;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 public class Watcher {
 	private final TaskSupplier taskSupplier;
 	private List<TaskOps> ops = new ArrayList<>();
 
-	Watcher(final Map<String, Task> processes) {
+	Watcher(final ConcurrentMap<String, Task> processes) {
 		taskSupplier = new TaskSupplier(processes);
 	}
 

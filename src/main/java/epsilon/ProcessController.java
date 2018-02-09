@@ -14,8 +14,6 @@ import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @EnableAutoConfiguration
@@ -23,24 +21,29 @@ import java.util.stream.Stream;
 public class ProcessController {
 	private final Logger logger = Logger.getLogger(ProcessController.class.getName());
 
+	private final ProcessesConfig config;
+	private final RoutingController routingController;
+
 	@Autowired
-	private ProcessesConfig config;
-	@Autowired
-	private RoutingController routingController;
+	public ProcessController(final ProcessesConfig config, final RoutingController routingController) {
+		this.config = config;
+		this.routingController = routingController;
+	}
 
 	@PostConstruct
 	void startWatcher() {
-		routingController.setTaskWatcherOps(Arrays.asList(new TasksAlive(), new TasksOvertime(2)));
+		routingController.setTaskWatcherOps(Arrays.asList(new TasksAlive(), new TasksOvertime(1)));
 		routingController.startWatcher();
 	}
 
 	@RequestMapping("/start/{name}")
 	public String startProcess(@PathVariable("name") final String name,
 	                           @RequestParam final Map<String, String> body) {
+		final long startTime = System.currentTimeMillis();
 		logger.info("Process " + name + " started with " + body.entrySet());
 		final StringBuilder response = new StringBuilder();
-		config.get(name).ifPresent(path -> response.append(routingController.startProcess(name, Stream.concat(Stream.of(path), body.values().stream())
-				.collect(Collectors.toList()))));
+		config.getExecutable(name).ifPresent(path -> response.append(routingController.startProcess(name, new Arguments(path, body.values(), config.getAdditionalFiles(name)))));
+		logger.info("Process " + name + " ended after " + (System.currentTimeMillis() - startTime) + " ms");
 		return response.toString();
 	}
 

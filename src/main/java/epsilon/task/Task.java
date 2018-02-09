@@ -4,15 +4,23 @@ import epsilon.Constants;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 public class Task {
 	private final Process process;
 	private final long startTime;
+	private final Path workingDirectory;
 
-	public Task(final Process process) {
+	public Task(final Process process, final Path workingDirectory) {
 		this.process = process;
+		this.workingDirectory = workingDirectory;
 		this.startTime = System.currentTimeMillis();
+	}
+
+	public Task(final Process process, final String workingDirectory) {
+		this(process, Paths.get(workingDirectory));
 	}
 
 	public boolean overtime(final int limitInMinutes) {
@@ -37,5 +45,9 @@ public class Task {
 
 	public void kill() {
 		process.destroyForcibly();
+	}
+
+	public Path workingDirectory() {
+		return workingDirectory;
 	}
 }
