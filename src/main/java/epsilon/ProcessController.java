@@ -2,6 +2,7 @@ package epsilon;
 
 import epsilon.task.TasksAlive;
 import epsilon.task.TasksOvertime;
+import helpers.EpsilonLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Import;
@@ -13,13 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.PostConstruct;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.logging.Logger;
+
+import static helpers.Utils.getReturnFromLambda;
 
 @RestController
 @EnableAutoConfiguration
 @Import({ProcessesConfig.class, RoutingController.class})
 public class ProcessController {
-	private final Logger logger = Logger.getLogger(ProcessController.class.getName());
+	private final EpsilonLogger logger = new EpsilonLogger(ProcessController.class);
 
 	private final ProcessesConfig config;
 	private final RoutingController routingController;
@@ -39,12 +41,10 @@ public class ProcessController {
 	@RequestMapping("/start/{name}")
 	public String startProcess(@PathVariable("name") final String name,
 	                           @RequestParam final Map<String, String> body) {
-		final long startTime = System.currentTimeMillis();
-		logger.info("Process " + name + " started with " + body.entrySet());
-		final StringBuilder response = new StringBuilder();
-		config.getExecutable(name).ifPresent(path -> response.append(routingController.startProcess(name, new Arguments(path, body.values(), config.getAdditionalFiles(name)))));
-		logger.info("Process " + name + " ended after " + (System.currentTimeMillis() - startTime) + " ms");
-		return response.toString();
+		return getReturnFromLambda(response ->
+				logger.runningTime(name, body.entrySet().toString(),
+						() -> config.getExecutable(name)
+								.ifPresent(path -> response.append(routingController.startProcess(name, new Arguments(path, body.values(), config.getAdditionalFiles(name)))))));
 	}
 
 	@RequestMapping("/kill/{name}")

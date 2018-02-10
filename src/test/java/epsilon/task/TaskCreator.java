@@ -1,6 +1,6 @@
 package epsilon.task;
 
-import epsilon.Constants;
+import helpers.Constants;
 
 import static epsilon.task.ProcessCreator.createAliveProcess;
 import static epsilon.task.ProcessCreator.createDeadProcess;

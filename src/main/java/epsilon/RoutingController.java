@@ -2,16 +2,18 @@ package epsilon;
 
 import epsilon.task.Task;
 import epsilon.task.TaskOps;
-import org.apache.commons.io.FileUtils;
+import helpers.Constants;
+import helpers.FileHelper;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import static helpers.Utils.executeInSeparateThread;
+import static helpers.Utils.getReturnFromLambda;
 
 public class RoutingController {
 	final ConcurrentMap<String, Task> processes = new ConcurrentHashMap<>();
@@ -28,39 +30,29 @@ public class RoutingController {
 
 	Task startTask(final Arguments args) throws IOException {
 		final Path workingDirectory = createTempDirectory();
-		args.additionalFiles().forEach(fileToCopy -> copyFileToDirectory(fileToCopy, workingDirectory));
+		copyFilesToDirectory(workingDirectory, args.additionalFiles());
 		return new Task(new ProcessBuilder(args.args()).directory(workingDirectory.toFile()).start(), workingDirectory);
 	}
 
-	Path createTempDirectory() throws IOException {
-		return Files.createTempDirectory("epsilon");
+	Path createTempDirectory() {
+		return FileHelper.createTempDirectory();
 	}
 
-	private void copyFileToDirectory(final String srcFile, final Path directory) {
-		try {
-			FileUtils.copyFileToDirectory(new File(srcFile), directory.toFile());
-		} catch(final IOException e) {
-			e.printStackTrace();
-		}
+	private void copyFilesToDirectory(final Path directory, final Iterable<String> files) {
+		FileHelper.copyFilesToDirectory(directory, files);
 	}
 
 	String getProcessResponse(final String proc) {
-		try {
-			final StringBuilder response = new StringBuilder();
-			executeInSeparateThread(() -> Optional.ofNullable(processes.get(proc)).ifPresent(task -> {
-				response.append(task.getContent());
-				deleteWorkingDirectory(task);
-			}));
-			return response.toString();
-		} catch(final InterruptedException e) {
-			return Constants.EMPTY_STRING;
-		}
-	}
-
-	private void executeInSeparateThread(final Runnable toExecute) throws InterruptedException {
-		final Thread reader = new Thread(toExecute);
-		reader.start();
-		reader.join();
+		return getReturnFromLambda(response -> {
+			try {
+				executeInSeparateThread(() -> Optional.ofNullable(processes.get(proc)).ifPresent(task -> {
+					response.append(task.getContent());
+					deleteWorkingDirectory(task);
+				}));
+			} catch(final InterruptedException e) {
+				response.append(Constants.EMPTY_STRING);
+			}
+		});
 	}
 
 	public Optional<Task> getProcess(final String name) {
@@ -74,11 +66,7 @@ public class RoutingController {
 	}
 
 	void deleteWorkingDirectory(final Task process) {
-		try {
-			FileUtils.deleteDirectory(process.workingDirectory().toFile());
-		} catch(final IOException e) {
-			e.printStackTrace();
-		}
+		FileHelper.deleteDirectory(process.workingDirectory());
 	}
 
 	void startWatcher() {

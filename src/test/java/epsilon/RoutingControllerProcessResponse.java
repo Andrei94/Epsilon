@@ -2,6 +2,7 @@ package epsilon;
 
 import epsilon.task.BaseProcess;
 import epsilon.task.Task;
+import helpers.Constants;
 
 class RoutingControllerProcessResponse extends RoutingController {
 	private final BaseProcess process;

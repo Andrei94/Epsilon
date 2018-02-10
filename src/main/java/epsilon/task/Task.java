@@ -1,6 +1,6 @@
 package epsilon.task;
 
-import epsilon.Constants;
+import helpers.Constants;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;

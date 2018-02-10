@@ -1,6 +1,6 @@
 package epsilon.task;
 
-import epsilon.Constants;
+import helpers.Constants;
 import org.junit.jupiter.api.Test;
 
 import static epsilon.task.TaskCreator.createAliveTask;

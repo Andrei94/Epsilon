@@ -1,4 +1,4 @@
-package epsilon;
+package helpers;
 
 @SuppressWarnings("UtilityClass")
 public final class Constants {

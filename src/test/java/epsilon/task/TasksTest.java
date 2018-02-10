@@ -1,7 +1,7 @@
 package epsilon.task;
 
-import epsilon.Constants;
 import epsilon.TaskSupplier;
+import helpers.Constants;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
