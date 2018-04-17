@@ -43,8 +43,12 @@ public class ProcessController {
 	                           @RequestParam final Map<String, String> body) {
 		return getReturnFromLambda(response ->
 				logger.runningTime(name, body.entrySet().toString(),
-						() -> config.getExecutable(name)
-								.ifPresent(path -> response.append(routingController.startProcess(name, new Arguments(path, body.values(), config.getAdditionalFiles(name)))))));
+						() -> {
+							if(config.getExecutable(name).isPresent())
+								response.append(routingController.startProcess(name, new Arguments(config.getExecutable(name).get(), body.values(), config.getAdditionalFiles(name))));
+							else
+								logger.info("The name " + name + " was not found in the configuration");
+						}));
 	}
 
 	@RequestMapping("/kill/{name}")
