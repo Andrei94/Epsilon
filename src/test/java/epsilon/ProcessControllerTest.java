@@ -2,18 +2,21 @@ package epsilon;
 
 import epsilon.task.Task;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(SpringExtension.class)
+@RunWith(SpringRunner.class)
 @SpringBootTest
 class ProcessControllerTest {
 	private final String certMS = "CertMS";
@@ -34,9 +37,6 @@ class ProcessControllerTest {
 	private class RoutingControllerMock extends RoutingController {
 		@Override
 		String startProcess(final String programKey, final Arguments args) {
-			assertEquals(0, processes.size());
-			super.startProcess(programKey, args);
-			assertEquals(1, processes.size());
 			return getProcessResponse(programKey);
 		}
 

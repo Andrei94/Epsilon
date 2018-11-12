@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("UtilityClass")
 @Component
 public class ProcessesConfig {
-	private final Map<String, List<String>> map = new HashMap<String, List<String>>() {{
+	private final Map<String, List<String>> map = new HashMap<>() {{
 		put("CertMS", argsList("D:\\Programming\\Master\\CertMS\\CertMS\\bin\\Debug\\CertMS.exe"));
 		put("CertMSCRUD", argsList("D:\\Programming\\Master\\CertMSCRUD\\CertMSCRUD\\bin\\Debug\\CertMSCRUD.exe"));
 		put("CertMSGame", argsList("D:\\Programming\\Master\\CertMSGame\\CertMSGame\\bin\\Debug\\CertMSGame.exe"));

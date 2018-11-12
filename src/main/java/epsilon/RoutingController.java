@@ -4,6 +4,7 @@ import epsilon.task.Task;
 import epsilon.task.TaskOps;
 import helpers.Constants;
 import helpers.FileHelper;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -15,6 +16,7 @@ import java.util.concurrent.ConcurrentMap;
 import static helpers.Utils.executeInSeparateThread;
 import static helpers.Utils.getReturnFromLambda;
 
+@Service
 public class RoutingController {
 	final ConcurrentMap<String, Task> processes = new ConcurrentHashMap<>();
 	private final Watcher taskWatcher = new Watcher(processes);
